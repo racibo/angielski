@@ -8,7 +8,7 @@
 </head>
 <body>
 <header class="topbar"><div class="brand"><span class="brandmark">A</span><div><strong>Angielski</strong><small>Twój notatnik</small></div></div><div class="backup-actions"><button id="exportBtn" class="ghost">Eksport pełnej kopii</button><label class="ghost import-backup-label" for="importBackupFile">Import kopii</label><input id="importBackupFile" type="file" accept=".zip,.json,application/zip,application/json" hidden></div></header>
-<nav class="tabs" aria-label="Nawigacja"><button class="tab active" data-view="lessons">Lekcje</button><button class="tab" data-view="cards">Fiszki</button><button class="tab" data-view="audio">Audio w drodze</button><button class="tab" data-view="stats">Statystyki</button></nav>
+<nav class="tabs" aria-label="Nawigacja"><button class="tab active" data-view="lessons">Materiały lekcyjne</button><button class="tab" data-view="cards">Fiszki</button><button class="tab" data-view="audio">Ćwiczenia audio</button><button class="tab" data-view="stats">Statystyki</button></nav>
 <main>
 <section id="view-lessons" class="view">
   <div class="intro"><p class="eyebrow">TWÓJ OSOBISTY WARSZTAT</p><h1>Ucz się tego,<br>czego naprawdę używasz.</h1><p>Dodawaj materiał z lekcji. Zaznaczaj słowa i zdania jako fiszki, a potem ćwicz polski → angielski.</p></div>
@@ -53,12 +53,13 @@
   <div class="intro compact"><p class="eyebrow">TWOJE WYNIKI</p><h1>Statystyki nauki</h1><p>Postęp, regularność i plan kolejnych powtórek.</p></div>
   <div class="panel lesson-stats-panel"><h2>Postęp według lekcji</h2><div id="lessonStats"></div></div>
   <div class="panel learning-stats-panel"><h2>Statystyki ogólne</h2><div id="learningStats"></div></div>
+  <div class="panel learning-stats-panel"><h2>Ćwiczenia audio</h2><div id="audioStats"></div></div>
   <div class="panel"><div class="panelhead"><div><h2>Etapy nauki</h2><p class="hint">Ile fiszek znajduje się na każdym poziomie powtórek.</p></div></div><div id="stageChart" class="stage-chart"></div></div>
   <div class="panel"><div class="panelhead"><div><h2>Ile razy powtarzałeś fiszki?</h2><p class="hint">Liczba fiszek według liczby ocenionych powtórek.</p></div></div><div id="repetitionChart" class="stage-chart"></div></div>
   <div class="panel"><div class="panelhead"><div><h2>Fiszki sprawiające najwięcej problemów</h2><p class="hint">Ranking uwzględnia błędne odpowiedzi, podpowiedzi i niski poziom opanowania.</p></div><div class="hard-review-controls"><label>Liczba fiszek<select id="hardReviewCount"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option></select></label><button id="hardReviewBtn" class="primary">Przećwicz najtrudniejsze</button></div></div><div id="hardCardsList" class="hard-cards-list"></div></div>
 </section>
 <section id="view-audio" class="view hidden">
-  <div class="intro compact"><p class="eyebrow">SŁUCHAJ W DRODZE</p><h1>Twoja audio-powtórka</h1><p>Ułóż sesję z wybranych lekcji. Polski bodziec, chwila na przypomnienie, angielska odpowiedź — i powtórki.</p></div>
+  <div class="intro compact"><p class="eyebrow">SŁUCHAJ W DRODZE</p><h1>Ćwiczenia audio</h1><p>Ułóż sesję z wybranych lekcji. Polski bodziec, chwila na przypomnienie, angielska odpowiedź — i powtórki.</p></div>
   <div class="panel audioform">
     <label>Materiał<select id="audioLesson"><option value="all">Wszystkie lekcje</option></select></label>
     <label>Typ<select id="audioKind"><option value="all">Słówka + zwroty + zdania</option><option value="word">Tylko słówka</option><option value="phrase">Tylko krótkie zwroty</option><option value="sentence">Tylko zdania</option></select></label>
