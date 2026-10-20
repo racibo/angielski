@@ -32,7 +32,7 @@
           if(!col || item.x-col.lastX>65){col={text:item.text,lastX:item.x};cols.push(col);}
           else {col.text+=' '+item.text;col.lastX=item.x;}
         }
-        return cols.map(col=>col.text.replace(/\\s+/g,' ').trim()).join(' | ');
+        return cols.map(col=>col.text.replace(/\s+/g,' ').trim()).join(' | ');
       }));
     }
     return pages.flat();
