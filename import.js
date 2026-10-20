@@ -7,7 +7,7 @@
   const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const status = s => { $('#zipImportStatus').textContent = s; };
   const uid = () => crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random());
-  const guessKind = en => { const n=en.trim().split(/\s+/).length; return n===1?'word':n<=4?'phrase':'sentence'; };
+  const guessKind = en => { const n=en.trim().split(/\s+/).filter(Boolean).length; return n<=2?'word':n<=6?'phrase':'sentence'; };
 
   // Preserve PDF text positions so entries in separate columns are not merged into one line.
   async function pdfPages(file) {
@@ -102,20 +102,23 @@
         return;
       }
       const title=$('#zipLessonTitle').value.trim()||'Lekcja — Brilliant B1';
-      const lesson={id:uid(),title,date:new Date().toISOString().slice(0,10),items,group:'brilliant',sourceFiles:[],audioFiles:[]};
-      for(const pdf of brilliantPdfs) { const blob=await pdf.async('blob'); const saved=await saveAudio(new File([blob],pdf.name,{type:'application/pdf'}),lesson.id); lesson.sourceFiles.push({...saved,type:'pdf'}); }
-      for(const audio of brilliantAudio) {
-        const blob=await audio.async('blob');
-        lesson.audioFiles.push(await saveAudio(new File([blob],audio.name,{type:'audio/mp4'}),lesson.id));
-      }
       const key='racibo-english-notebook-v1';
       const state=JSON.parse(localStorage.getItem(key)||'{"lessons":[]}');
       state.lessons=state.lessons||[];
-      state.lessons.unshift(lesson);
+      const targetId=$('#zipTargetLesson')?.value||'';
+      let lesson=targetId?state.lessons.find(l=>l.id===targetId):null;
+      const created=!lesson;
+      if(!lesson){lesson={id:uid(),title,date:new Date().toISOString().slice(0,10),items:[],group:'brilliant',sourceFiles:[],audioFiles:[]};state.lessons.unshift(lesson);}
+      lesson.items=lesson.items||[];lesson.sourceFiles=lesson.sourceFiles||[];lesson.audioFiles=lesson.audioFiles||[];
+      const existing=new Set(lesson.items.map(i=>(i.en+'|'+i.pl).toLocaleLowerCase()));
+      const newItems=items.filter(i=>!existing.has((i.en+'|'+i.pl).toLocaleLowerCase()));
+      lesson.items.push(...newItems);
+      for(const pdf of brilliantPdfs) { const blob=await pdf.async('blob'); const saved=await saveAudio(new File([blob],pdf.name,{type:'application/pdf'}),lesson.id); lesson.sourceFiles.push({...saved,type:'pdf'}); }
+      for(const audio of brilliantAudio) { const blob=await audio.async('blob'); lesson.audioFiles.push(await saveAudio(new File([blob],audio.name,{type:'audio/mp4'}),lesson.id)); }
       localStorage.setItem(key,JSON.stringify(state));
       const skipped=pdfs.length-brilliantPdfs.length, skippedAudio=audios.length-brilliantAudio.length;
-      status('Gotowe: automatycznie dodano '+items.length+' fiszek Brilliant B1 i '+lesson.audioFiles.length+' nagrań.');
-      $('#zipImportPreview').innerHTML='<div class="import-summary"><strong>Import zakończony</strong><p>Utworzono lekcję „'+esc(title)+'” z '+items.length+' fiszkami. Wszystkie rozpoznane pozycje zostały automatycznie oznaczone jako fiszki.</p><p>Oryginalne nagrania Brilliant: '+lesson.audioFiles.length+'. Pominięte pliki innych grup: '+(skipped+skippedAudio)+'.</p><button type="button" class="secondary" id="refreshAfterImport">Pokaż zaimportowaną lekcję</button></div>';
+      status('Gotowe: dodano '+newItems.length+' nowych fiszek do lekcji „'+esc(lesson.title)+'”.');
+      $('#zipImportPreview').innerHTML='<div class="import-summary"><strong>Import zakończony</strong><p>'+(created?'Utworzono':'Zaktualizowano')+' lekcję „'+esc(lesson.title)+'”. Dodano '+newItems.length+' nowych fiszek (pominięto duplikaty: '+(items.length-newItems.length)+').</p><p>Pliki PDF: '+lesson.sourceFiles.length+'. Nagrania audio: '+lesson.audioFiles.length+'. Pominięte pliki innych grup: '+(skipped+skippedAudio)+'.</p><button type="button" class="secondary" id="refreshAfterImport">Pokaż lekcję</button></div>';
       $('#refreshAfterImport').onclick=()=>location.reload();
     } catch(err) {
       status('Błąd importu ZIP: '+err.message);

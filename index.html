@@ -16,7 +16,7 @@
     <div class="panelhead"><h2>Nowa lekcja</h2><span class="hint">Zapis automatyczny</span></div>
     <form id="lessonForm" class="lessonform"><label>Nazwa / temat<input id="lessonTitle" placeholder="np. Autoprezentacja przewodnika" required></label><label>Data<input id="lessonDate" type="date"></label><button class="primary" type="submit">＋ Dodaj lekcję</button></form>
   </div>
-  <div class="panel" id="zipImportPanel"><div class="panelhead"><div><p class="eyebrow">IMPORT MATERIAŁÓW</p><h2>Importuj lekcję z ZIP</h2></div><span class="hint">PDF + M4A</span></div><p class="hint">Wybierz paczkę od nauczyciela. Importer spróbuje odczytać słownictwo z PDF, zachowa oryginalne nagrania i pokaże fiszki do sprawdzenia przed dodaniem.</p><form id="zipImportForm" class="zipform"><label>Nazwa lekcji<input id="zipLessonTitle" value="Lekcja 2 — Brilliant B1" required></label><label>Grupa<select id="zipGroup"><option value="brilliant">Brilliant B1</option></select></label><label>Plik ZIP<input id="zipFile" type="file" accept=".zip,application/zip" required></label><button class="primary" type="submit">Analizuj ZIP</button></form><div id="zipImportStatus" class="hint" aria-live="polite"></div><div id="zipImportPreview"></div></div>\n  <div id="lessonList" class="lessonlist"></div>
+  <div class="panel" id="zipImportPanel"><div class="panelhead"><div><p class="eyebrow">IMPORT MATERIAŁÓW</p><h2>Importuj lekcję z ZIP</h2></div><span class="hint">PDF + M4A</span></div><p class="hint">Wybierz paczkę od nauczyciela. Importer spróbuje odczytać słownictwo z PDF, zachowa oryginalne nagrania i pokaże fiszki do sprawdzenia przed dodaniem.</p><form id="zipImportForm" class="zipform"><label>Nazwa lekcji<input id="zipLessonTitle" value="Lekcja 2 — Brilliant B1" required></label><label>Grupa<select id="zipGroup"><option value="brilliant">Brilliant B1</option></select></label><label>Dodaj do lekcji<select id="zipTargetLesson"><option value="">Utwórz nową lekcję z ZIP</option></select></label><label>Plik ZIP<input id="zipFile" type="file" accept=".zip,application/zip" required></label><button class="primary" type="submit">Analizuj ZIP</button></form><div id="zipImportStatus" class="hint" aria-live="polite"></div><div id="zipImportPreview"></div></div>\n  <div id="lessonList" class="lessonlist"></div>
   <div class="panel hidden" id="editorPanel">
     <div class="panelhead"><div><p class="eyebrow">EDYCJA LEKCJI</p><h2 id="editorTitle">Lekcja</h2></div><button id="closeEditor" class="ghost">Zamknij</button></div>
     <form id="itemForm" class="itemform">
@@ -33,14 +33,15 @@
   <div class="intro compact"><p class="eyebrow">AKTYWNE PRZYPOMINANIE</p><h1>Polski → English</h1><p>Najpierw spróbuj powiedzieć odpowiedź po angielsku. Dopiero potem ją odsłoń.</p></div>
   <div class="filters panel">
     <label>Lekcja<select id="cardLesson"><option value="all">Wszystkie lekcje</option></select></label>
-    <label>Typ<select id="cardKind"><option value="all">Wszystko</option><option value="word">Słówka</option><option value="phrase">Krótkie zwroty</option><option value="sentence">Zdania</option></select></label>
-    <label>Długość<select id="cardLength"><option value="all">Dowolna</option><option value="short">Krótkie (do 4 słów)</option><option value="long">Dłuższe (5+ słów)</option></select></label>
+    <label>Kategoria<select id="cardKind"><option value="all">Wszystko</option><option value="word">Słówka (do 2 słów)</option><option value="phrase">Wyrażenia (3–6 słów)</option><option value="sentence">Zdania (powyżej 6 słów)</option></select></label><select id="cardLength" hidden><option value="all">Dowolna</option></select>
   </div>
+  <div class="panel total-review-panel"><div><strong>Całkowita powtórka</strong><p class="hint">Wszystkie fiszki ze wszystkich lekcji, z priorytetem dla trudnych i zaległych.</p></div><button id="totalReview" class="primary">▶ Powtórz wszystko</button></div><p id="studyModeNote" class="hint hidden"></p>
+  <div class="panel lesson-stats-panel"><h2>Postęp według lekcji</h2><div id="lessonStats"></div></div>
   <div class="studybox">
-    <div class="study-meta"><span id="cardCounter">0 fiszek</span><button id="speakPrompt" class="iconbtn" title="Odczytaj po polsku">🔊 PL</button></div>
+    <div class="study-meta"><span id="cardCounter">0 fiszek</span><span id="cardReviewStatus" class="card-review-status"></span><button id="speakPrompt" class="iconbtn" title="Odczytaj po polsku">🔊 PL</button></div>
     <div id="prompt" class="prompt">Dodaj fiszki w zakładce Lekcje</div>
     <button id="reveal" class="primary wide">Pokaż odpowiedź</button>
-    <div id="answerArea" class="answerarea hidden"><div id="answer" class="answer"></div><button id="speakAnswer" class="secondary">🔊 Posłuchaj po angielsku (EN)</button><div class="selfrate"><button id="again" class="rate bad">Powtórz</button><button id="known" class="rate good">Znam</button></div></div>
+    <div id="answerArea" class="answerarea hidden"><div id="answer" class="answer"></div><button id="speakAnswer" class="secondary">🔊 Posłuchaj po angielsku (EN)</button><div class="selfrate"><button id="again" class="rate bad" aria-label="Nie znam, powtórz częściej"><span class="rate-icon">↻</span><span>Nie znam</span><small>Powtórz częściej</small></button><button id="known" class="rate good" aria-label="Znam, powtórz później"><span class="rate-icon">✓</span><span>Znam</span><small>Powtórz później</small></button></div></div>
     <div class="study-controls"><button id="prevCard" class="ghost">← Wstecz</button><button id="nextCard" class="ghost">Następna →</button></div>
   </div>
 </section>
