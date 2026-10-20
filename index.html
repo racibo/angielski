@@ -22,7 +22,7 @@
     <form id="itemForm" class="itemform">
       <label>Polski / podpowiedź<input id="itemPl" placeholder="np. Warto odwiedzić" required></label>
       <label>Angielski<input id="itemEn" placeholder="e.g. It's well worth a visit." required></label>
-      <label>Rodzaj<select id="itemKind"><option value="word">Słówko</option><option value="phrase">Krótki zwrot</option><option value="sentence">Zdanie</option></select></label>
+      <label>Kategoria (ustalana automatycznie z angielskiego)<select id="itemKind" disabled><option value="word">Słówko · do 2 słów</option><option value="phrase">Wyrażenie · 3–6 słów</option><option value="sentence">Zdanie · powyżej 6 słów</option></select></label>
       <label class="checklabel"><input id="itemFlash" type="checkbox" checked> Dodaj jako fiszkę</label>
       <button class="primary" type="submit">Dodaj do lekcji</button>
     </form>
