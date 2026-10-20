@@ -1,0 +1,9 @@
+{
+  "name": "Angielski • Racibo",
+  "short_name": "Angielski",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f7f2",
+  "theme_color": "#173c35",
+  "description": "Notatnik lekcji angielskiego, fiszki i audio"
+}

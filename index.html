@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#173c35"><meta name="description" content="Osobisty notatnik lekcji angielskiego, fiszki i audio do nauki w drodze.">
+  <link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="style.css">
+  <title>Angielski • Racibo</title>
+</head>
+<body>
+<header class="topbar"><div class="brand"><span class="brandmark">A</span><div><strong>Angielski</strong><small>Twój notatnik</small></div></div><button id="exportBtn" class="ghost">Eksport danych</button></header>
+<nav class="tabs" aria-label="Nawigacja"><button class="tab active" data-view="lessons">Lekcje</button><button class="tab" data-view="cards">Fiszki</button><button class="tab" data-view="audio">Audio w drodze</button></nav>
+<main>
+<section id="view-lessons" class="view">
+  <div class="intro"><p class="eyebrow">TWÓJ OSOBISTY WARSZTAT</p><h1>Ucz się tego,<br>czego naprawdę używasz.</h1><p>Dodawaj materiał z lekcji. Zaznaczaj słowa i zdania jako fiszki, a potem ćwicz polski → angielski.</p></div>
+  <div class="panel">
+    <div class="panelhead"><h2>Nowa lekcja</h2><span class="hint">Zapis automatyczny</span></div>
+    <form id="lessonForm" class="lessonform"><label>Nazwa / temat<input id="lessonTitle" placeholder="np. Autoprezentacja przewodnika" required></label><label>Data<input id="lessonDate" type="date"></label><button class="primary" type="submit">＋ Dodaj lekcję</button></form>
+  </div>
+  <div id="lessonList" class="lessonlist"></div>
+  <div class="panel hidden" id="editorPanel">
+    <div class="panelhead"><div><p class="eyebrow">EDYCJA LEKCJI</p><h2 id="editorTitle">Lekcja</h2></div><button id="closeEditor" class="ghost">Zamknij</button></div>
+    <form id="itemForm" class="itemform">
+      <label>Polski / podpowiedź<input id="itemPl" placeholder="np. Warto odwiedzić" required></label>
+      <label>Angielski<input id="itemEn" placeholder="e.g. It's well worth a visit." required></label>
+      <label>Rodzaj<select id="itemKind"><option value="word">Słówko</option><option value="phrase">Krótki zwrot</option><option value="sentence">Zdanie</option></select></label>
+      <label class="checklabel"><input id="itemFlash" type="checkbox" checked> Dodaj jako fiszkę</label>
+      <button class="primary" type="submit">Dodaj do lekcji</button>
+    </form>
+    <div id="itemList" class="itemlist"></div>
+  </div>
+</section>
+<section id="view-cards" class="view hidden">
+  <div class="intro compact"><p class="eyebrow">AKTYWNE PRZYPOMINANIE</p><h1>Polski → English</h1><p>Najpierw spróbuj powiedzieć odpowiedź po angielsku. Dopiero potem ją odsłoń.</p></div>
+  <div class="filters panel">
+    <label>Lekcja<select id="cardLesson"><option value="all">Wszystkie lekcje</option></select></label>
+    <label>Typ<select id="cardKind"><option value="all">Wszystko</option><option value="word">Słówka</option><option value="phrase">Krótkie zwroty</option><option value="sentence">Zdania</option></select></label>
+    <label>Długość<select id="cardLength"><option value="all">Dowolna</option><option value="short">Krótkie (do 4 słów)</option><option value="long">Dłuższe (5+ słów)</option></select></label>
+  </div>
+  <div class="studybox">
+    <div class="study-meta"><span id="cardCounter">0 fiszek</span><button id="speakPrompt" class="iconbtn" title="Odczytaj polską podpowiedź">🔊</button></div>
+    <div id="prompt" class="prompt">Dodaj fiszki w zakładce Lekcje</div>
+    <button id="reveal" class="primary wide">Pokaż odpowiedź</button>
+    <div id="answerArea" class="answerarea hidden"><div id="answer" class="answer"></div><button id="speakAnswer" class="secondary">🔊 Posłuchaj angielskiego</button><div class="selfrate"><button id="again" class="rate bad">Powtórz</button><button id="known" class="rate good">Znam</button></div></div>
+    <div class="study-controls"><button id="prevCard" class="ghost">← Wstecz</button><button id="nextCard" class="ghost">Następna →</button></div>
+  </div>
+</section>
+<section id="view-audio" class="view hidden">
+  <div class="intro compact"><p class="eyebrow">SŁUCHAJ W DRODZE</p><h1>Twoja audio-powtórka</h1><p>Ułóż sesję z wybranych lekcji. Polski bodziec, chwila na przypomnienie, angielska odpowiedź — i powtórki.</p></div>
+  <div class="panel audioform">
+    <label>Materiał<select id="audioLesson"><option value="all">Wszystkie lekcje</option></select></label>
+    <label>Typ<select id="audioKind"><option value="all">Słówka + zwroty + zdania</option><option value="word">Tylko słówka</option><option value="phrase">Tylko krótkie zwroty</option><option value="sentence">Tylko zdania</option></select></label>
+    <div class="twofields"><label>Powtórzenia każdego elementu<input id="repeats" type="number" min="1" max="10" value="3"></label><label>Pauza na odpowiedź (sek.)<input id="pauseSec" type="number" min="0" max="15" value="4"></label></div>
+    <label class="checklabel"><input id="audioReverse" type="checkbox"> Najpierw angielski, potem polski (tryb osłuchania)</label>
+    <button id="buildAudio" class="primary wide">Przygotuj i odtwórz sesję</button>
+    <p class="hint">Odtwarzanie korzysta z głosów dostępnych w przeglądarce/telefonie. Zablokowany ekran lub oszczędzanie baterii mogą przerwać syntezę mowy. Do niezawodnego, gotowego pliku MP3 potrzebny byłby osobny generator audio.</p>
+  </div>
+  <div class="player panel">
+    <div class="player-status"><span class="pulse"></span><span id="audioStatus">Gotowy</span></div>
+    <div id="audioNow" class="audio-now">Wybierz materiał i przygotuj sesję</div>
+    <div class="progress"><span id="audioProgress"></span></div>
+    <div class="playerbuttons"><button id="playPause" class="primary" disabled>▶ Start</button><button id="stopAudio" class="ghost" disabled>■ Stop</button></div>
+    <div class="audioqueue"><strong>Plan sesji</strong><span id="queueCount">0 pozycji</span><ol id="queueList"></ol></div>
+  </div>
+</section>
+</main>
+<footer>Angielski • Racibo <span>Materiały zapisane lokalnie na tym urządzeniu</span></footer>
+<script src="app.js"></script>
+</body></html>
