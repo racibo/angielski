@@ -22,6 +22,7 @@
     <form id="itemForm" class="itemform">
       <label>Polski / podpowiedź<input id="itemPl" placeholder="np. Warto odwiedzić" required></label>
       <label>Angielski<input id="itemEn" placeholder="e.g. It's well worth a visit." required></label>
+      <label>Podpowiedź (opcjonalnie)<textarea id="itemHint" rows="2" placeholder="np. Dosłownie: warte odwiedzenia"></textarea></label>
       <label>Kategoria (ustalana automatycznie z angielskiego)<select id="itemKind" disabled><option value="word">Słówko · do 2 słów</option><option value="phrase">Wyrażenie · 3–6 słów</option><option value="sentence">Zdanie · powyżej 6 słów</option></select></label>
       <label class="checklabel"><input id="itemFlash" type="checkbox" checked> Dodaj jako fiszkę</label>
       <button class="primary" type="submit">Dodaj do lekcji</button>
@@ -37,10 +38,13 @@
   </div>
   <div class="panel total-review-panel"><div><strong>Całkowita powtórka</strong><p class="hint">Wszystkie fiszki ze wszystkich lekcji, z priorytetem dla trudnych i zaległych.</p></div><button id="totalReview" class="primary">▶ Powtórz wszystko</button></div><p id="studyModeNote" class="hint hidden"></p>
   <div class="panel lesson-stats-panel"><h2>Postęp według lekcji</h2><div id="lessonStats"></div></div>
+  <div class="panel learning-stats-panel"><h2>Statystyki nauki</h2><div id="learningStats"></div></div>
   <div class="studybox">
     <div class="study-meta"><span id="cardCounter">0 fiszek</span><span id="cardReviewStatus" class="card-review-status"></span><button id="speakPrompt" class="iconbtn" title="Odczytaj po polsku">🔊 PL</button></div>
     <div id="prompt" class="prompt">Dodaj fiszki w zakładce Lekcje</div>
     <button id="reveal" class="primary wide">Pokaż odpowiedź</button>
+    <button id="showHint" class="secondary wide hint-reveal-button hidden">💡 Pokaż podpowiedź</button>
+    <div id="hintArea" class="hint-area hidden"><strong>Podpowiedź</strong><p id="hintText"></p><small>Po użyciu podpowiedzi odpowiedź nie podniesie poziomu nauki — fiszka wróci za 10 minut.</small></div>
     <div id="answerArea" class="answerarea hidden"><div id="answer" class="answer"></div><button id="speakAnswer" class="secondary">🔊 Posłuchaj po angielsku (EN)</button><div class="selfrate"><button id="again" class="rate bad" aria-label="Nie znam, powtórz częściej"><span class="rate-icon">↻</span><span>Nie znam</span><small>Powtórz częściej</small></button><button id="known" class="rate good" aria-label="Znam, powtórz później"><span class="rate-icon">✓</span><span>Znam</span><small>Powtórz później</small></button></div></div>
     <div class="study-controls"><button id="prevCard" class="ghost">← Wstecz</button><button id="nextCard" class="ghost">Następna →</button></div>
   </div>
