@@ -25,7 +25,15 @@
         row.items.push(item);
       }
       rows.sort((a,b)=>b.y-a.y);
-      pages.push(rows.map(r=>r.items.sort((a,b)=>a.x-b.x).map(x=>x.text).join(' | ')));
+      pages.push(rows.map(r=>{
+        const sorted=r.items.sort((a,b)=>a.x-b.x), cols=[];
+        for(const item of sorted){
+          let col=cols[cols.length-1];
+          if(!col || item.x-col.lastX>65){col={text:item.text,lastX:item.x};cols.push(col);}
+          else {col.text+=' '+item.text;col.lastX=item.x;}
+        }
+        return cols.map(col=>col.text.replace(/\\s+/g,' ').trim()).join(' | ');
+      }));
     }
     return pages.flat();
   }
@@ -38,8 +46,8 @@
       if(cells.length<2) continue;
       // English is normally the first cell and Polish the next cell. Ignore example columns.
       const en=cells[0].replace(/^\d+[.)]?\s*/,'').trim();
-      let pl=cells.find((s,i)=>i>0 && polish.test(s));
-      if(!pl || !en || en.length>100 || pl.length>180 || !/[A-Za-z]/.test(en) || polish.test(en) || skip.test(en)) continue;
+      let pl=cells[1] || cells.find((s,i)=>i>0 && polish.test(s));
+      if(!pl || !en || en.length>100 || pl.length>180 || !/[A-Za-z]/.test(en) || polish.test(en) || skip.test(en) || /^(translation|meaning|polish)$/i.test(pl)) continue;
       if(/^(the |a |an )?(english|polish|translation|meaning)$/i.test(en)) continue;
       const key=(en+'|'+pl).toLocaleLowerCase();
       if(seen.has(key)) continue;
