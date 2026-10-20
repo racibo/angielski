@@ -8,7 +8,7 @@
 </head>
 <body>
 <header class="topbar"><div class="brand"><span class="brandmark">A</span><div><strong>Angielski</strong><small>Twój notatnik</small></div></div><div class="backup-actions"><button id="exportBtn" class="ghost">Eksport pełnej kopii</button><label class="ghost import-backup-label" for="importBackupFile">Import kopii</label><input id="importBackupFile" type="file" accept=".zip,.json,application/zip,application/json" hidden></div></header>
-<nav class="tabs" aria-label="Nawigacja"><button class="tab active" data-view="lessons">Lekcje</button><button class="tab" data-view="cards">Fiszki</button><button class="tab" data-view="audio">Audio w drodze</button></nav>
+<nav class="tabs" aria-label="Nawigacja"><button class="tab active" data-view="lessons">Lekcje</button><button class="tab" data-view="cards">Fiszki</button><button class="tab" data-view="audio">Audio w drodze</button><button class="tab" data-view="stats">Statystyki</button></nav>
 <main>
 <section id="view-lessons" class="view">
   <div class="intro"><p class="eyebrow">TWÓJ OSOBISTY WARSZTAT</p><h1>Ucz się tego,<br>czego naprawdę używasz.</h1><p>Dodawaj materiał z lekcji. Zaznaczaj słowa i zdania jako fiszki, a potem ćwicz polski → angielski.</p></div>
@@ -32,14 +32,7 @@
 </section>
 <section id="view-cards" class="view hidden">
   <div class="intro compact"><p class="eyebrow">AKTYWNE PRZYPOMINANIE</p><h1>Polski → English</h1><p>Najpierw spróbuj powiedzieć odpowiedź po angielsku. Dopiero potem ją odsłoń.</p></div>
-  <div class="filters panel">
-    <label>Lekcja<select id="cardLesson"><option value="all">Wszystkie lekcje</option></select></label>
-    <label>Kategoria<select id="cardKind"><option value="all">Wszystko</option><option value="word">Słówka (do 2 słów)</option><option value="phrase">Wyrażenia (3–6 słów)</option><option value="sentence">Zdania (powyżej 6 słów)</option></select></label><select id="cardLength" hidden><option value="all">Dowolna</option></select>
-  </div>
-  <div class="panel total-review-panel"><div><strong>Całkowita powtórka</strong><p class="hint">Wszystkie fiszki ze wszystkich lekcji, z priorytetem dla trudnych i zaległych.</p></div><button id="totalReview" class="primary">▶ Powtórz wszystko</button></div><p id="studyModeNote" class="hint hidden"></p>
-  <div class="panel lesson-stats-panel"><h2>Postęp według lekcji</h2><div id="lessonStats"></div></div>
-  <div class="panel learning-stats-panel"><h2>Statystyki nauki</h2><div id="learningStats"></div></div>
-  <div class="studybox">
+  <div class="studybox" id="studybox">
     <div class="study-meta"><span id="cardCounter">0 fiszek</span><span id="cardReviewStatus" class="card-review-status"></span><button id="speakPrompt" class="iconbtn" title="Odczytaj po polsku">🔊 PL</button></div>
     <div id="prompt" class="prompt">Dodaj fiszki w zakładce Lekcje</div>
     <button id="reveal" class="primary wide">Pokaż odpowiedź</button>
@@ -48,6 +41,16 @@
     <div id="answerArea" class="answerarea hidden"><div id="answer" class="answer"></div><button id="speakAnswer" class="secondary">🔊 Posłuchaj po angielsku (EN)</button><div class="selfrate"><button id="again" class="rate bad" aria-label="Nie znam, powtórz częściej"><span class="rate-icon">↻</span><span>Nie znam</span><small>Powtórz częściej</small></button><button id="known" class="rate good" aria-label="Znam, powtórz później"><span class="rate-icon">✓</span><span>Znam</span><small>Powtórz później</small></button></div></div>
     <div class="study-controls"><button id="prevCard" class="ghost">← Wstecz</button><button id="nextCard" class="ghost">Następna →</button></div>
   </div>
+  <div class="filters panel">
+    <label>Lekcja<select id="cardLesson"><option value="all">Wszystkie lekcje</option></select></label>
+    <label>Kategoria<select id="cardKind"><option value="all">Wszystko</option><option value="word">Słówka (do 2 słów)</option><option value="phrase">Wyrażenia (3–6 słów)</option><option value="sentence">Zdania (powyżej 6 słów)</option></select></label><select id="cardLength" hidden><option value="all">Dowolna</option></select>
+  </div>
+  <div class="panel total-review-panel"><div><strong>Całkowita powtórka</strong><p class="hint">Wszystkie fiszki ze wszystkich lekcji, z priorytetem dla trudnych i zaległych.</p></div><button id="totalReview" class="primary">▶ Powtórz wszystko</button></div><p id="studyModeNote" class="hint hidden"></p>
+</section>
+<section id="view-stats" class="view hidden">
+  <div class="intro compact"><p class="eyebrow">TWOJE WYNIKI</p><h1>Statystyki nauki</h1><p>Postęp, regularność i plan kolejnych powtórek.</p></div>
+  <div class="panel lesson-stats-panel"><h2>Postęp według lekcji</h2><div id="lessonStats"></div></div>
+  <div class="panel learning-stats-panel"><h2>Statystyki ogólne</h2><div id="learningStats"></div></div>
 </section>
 <section id="view-audio" class="view hidden">
   <div class="intro compact"><p class="eyebrow">SŁUCHAJ W DRODZE</p><h1>Twoja audio-powtórka</h1><p>Ułóż sesję z wybranych lekcji. Polski bodziec, chwila na przypomnienie, angielska odpowiedź — i powtórki.</p></div>
