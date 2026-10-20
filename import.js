@@ -103,7 +103,7 @@
       }
       const title=$('#zipLessonTitle').value.trim()||'Lekcja — Brilliant B1';
       const lesson={id:uid(),title,date:new Date().toISOString().slice(0,10),items,group:'brilliant',sourceFiles:[],audioFiles:[]};
-      for(const pdf of brilliantPdfs) lesson.sourceFiles.push({name:pdf.name,type:'pdf'});
+      for(const pdf of brilliantPdfs) { const blob=await pdf.async('blob'); const saved=await saveAudio(new File([blob],pdf.name,{type:'application/pdf'}),lesson.id); lesson.sourceFiles.push({...saved,type:'pdf'}); }
       for(const audio of brilliantAudio) {
         const blob=await audio.async('blob');
         lesson.audioFiles.push(await saveAudio(new File([blob],audio.name,{type:'audio/mp4'}),lesson.id));
