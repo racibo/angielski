@@ -37,10 +37,10 @@
     <label>Długość<select id="cardLength"><option value="all">Dowolna</option><option value="short">Krótkie (do 4 słów)</option><option value="long">Dłuższe (5+ słów)</option></select></label>
   </div>
   <div class="studybox">
-    <div class="study-meta"><span id="cardCounter">0 fiszek</span><button id="speakPrompt" class="iconbtn" title="Odczytaj polską podpowiedź">🔊</button></div>
+    <div class="study-meta"><span id="cardCounter">0 fiszek</span><button id="speakPrompt" class="iconbtn" title="Odczytaj po polsku">🔊 PL</button></div>
     <div id="prompt" class="prompt">Dodaj fiszki w zakładce Lekcje</div>
     <button id="reveal" class="primary wide">Pokaż odpowiedź</button>
-    <div id="answerArea" class="answerarea hidden"><div id="answer" class="answer"></div><button id="speakAnswer" class="secondary">🔊 Posłuchaj angielskiego</button><div class="selfrate"><button id="again" class="rate bad">Powtórz</button><button id="known" class="rate good">Znam</button></div></div>
+    <div id="answerArea" class="answerarea hidden"><div id="answer" class="answer"></div><button id="speakAnswer" class="secondary">🔊 Posłuchaj po angielsku (EN)</button><div class="selfrate"><button id="again" class="rate bad">Powtórz</button><button id="known" class="rate good">Znam</button></div></div>
     <div class="study-controls"><button id="prevCard" class="ghost">← Wstecz</button><button id="nextCard" class="ghost">Następna →</button></div>
   </div>
 </section>
@@ -50,7 +50,7 @@
     <label>Materiał<select id="audioLesson"><option value="all">Wszystkie lekcje</option></select></label>
     <label>Typ<select id="audioKind"><option value="all">Słówka + zwroty + zdania</option><option value="word">Tylko słówka</option><option value="phrase">Tylko krótkie zwroty</option><option value="sentence">Tylko zdania</option></select></label>
     <div class="twofields"><label>Powtórzenia każdego elementu<input id="repeats" type="number" min="1" max="10" value="3"></label><label>Pauza na odpowiedź (sek.)<input id="pauseSec" type="number" min="0" max="15" value="4"></label></div>
-    <label class="checklabel"><input id="audioReverse" type="checkbox"> Najpierw angielski, potem polski (tryb osłuchania)</label>
+    <label class="checklabel"><input id="audioReverse" type="checkbox"> Kolejność: najpierw angielski, potem polski (domyślnie: polski → angielski)</label>
     <button id="buildAudio" class="primary wide">Przygotuj i odtwórz sesję</button>
     <p class="hint">Odtwarzanie korzysta z głosów dostępnych w przeglądarce/telefonie. Zablokowany ekran lub oszczędzanie baterii mogą przerwać syntezę mowy. Do niezawodnego, gotowego pliku MP3 potrzebny byłby osobny generator audio.</p>
   </div>
