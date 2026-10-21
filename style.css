@@ -29,3 +29,7 @@
 .learning-metrics{gap:6px}.learning-metric{padding:8px 10px;border-radius:9px}.learning-metric span{font-size:10px;min-height:25px}.learning-metric strong{font-size:21px;margin-top:2px}.audio-metrics .learning-metric strong{font-size:20px}@media(max-width:600px){.learning-metrics{gap:6px}.learning-metric{padding:8px}.learning-metric span{min-height:24px}.learning-metric strong{font-size:19px}}
 
 .hard-detail-stats{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:7px;font-size:.78rem;color:var(--muted)}.hard-detail-stats span{white-space:nowrap}.hard-detail-stats .hard-good{color:#25845b}.hard-detail-stats .hard-bad{color:#b84a43}.hard-detail-stats .hard-assisted{color:#9a751e}
+
+
+/* Procentowy rozkład ocen i względna liczba prób w statystykach fiszek */
+.attempt-bar,.attempt-volume{display:flex;overflow:hidden;height:9px;border-radius:999px;background:var(--line);margin-top:8px;width:100%}.attempt-bar span{display:block;height:100%}.attempt-bar .bar-good{background:#3e9b70}.attempt-bar .bar-bad{background:#c4554d}.attempt-bar .bar-hint{background:#e4b44e}.attempt-volume{height:4px;margin-top:5px;background:#edf0eb}.attempt-volume span{display:block;height:100%;background:#8a9b94;border-radius:999px}
