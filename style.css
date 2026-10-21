@@ -44,3 +44,6 @@
 
 /* Klikalne kafelki w statystykach otwierają odpowiadający im zestaw fiszek. */
 .learning-metric-clickable{display:block;width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer;appearance:none;transition:border-color .15s,background .15s}.learning-metric-clickable:hover,.learning-metric-clickable:focus-visible{border-color:#7da68c;background:#eef6ef;outline:2px solid #a6c9b1;outline-offset:1px}.learning-metric-clickable small{display:block;margin-top:5px;color:#547765;font-size:10px;font-weight:700}.learning-metric-clickable strong{margin-top:2px}
+
+/* Wiersze postępu według lekcji są klikalne i uruchamiają naukę z tej lekcji. */
+.lesson-stat-clickable{width:100%;font:inherit;color:inherit;text-align:left;background:transparent;border:0;cursor:pointer;appearance:none}.lesson-stat-clickable:hover,.lesson-stat-clickable:focus-visible{background:#f2f7f1;outline:2px solid #a6c9b1;outline-offset:1px;border-radius:8px}.lesson-stat-clickable .progress{pointer-events:none}.stats-row-action{display:block;color:#547765;font-size:10px;font-weight:700;margin-top:4px}
