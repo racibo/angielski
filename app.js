@@ -1,6 +1,13 @@
 const $=s=>document.querySelector(s);
 const DBKEY='racibo-english-notebook-v1';
+const AUDIO_SETTINGS_KEY='racibo-english-audio-settings-v1';
+const AUDIO_SETTING_IDS=['repeats','pauseSec','plRepeat','enRepeat','audioLesson','audioKind','audioProgressFilter','audioCardLimit','audioReverse'];
+function saveAudioSettings(){const settings={};for(const id of AUDIO_SETTING_IDS){const el=$('#'+id);if(el)settings[id]=el.type==='checkbox'?el.checked:el.value;}try{localStorage.setItem(AUDIO_SETTINGS_KEY,JSON.stringify(settings))}catch{}}
+function restoreAudioSettings(){try{const settings=JSON.parse(localStorage.getItem(AUDIO_SETTINGS_KEY)||'{}');for(const id of AUDIO_SETTING_IDS){const el=$('#'+id);if(!el||!(id in settings))continue;if(el.type==='checkbox')el.checked=Boolean(settings[id]);else if([...el.options].some(o=>o.value===String(settings[id]))||el.type==='number')el.value=String(settings[id]);}}catch{}}
+
 let state=load(), editing=null, editingItemId=null, deck=[], cardIndex=0, audioPlan=[], audioIndex=0, utterance=null, playing=false, loopActive=false, stopRequested=false, audioRunId=0, hintUsedThisCard=false, currentAudioSession=null;
+restoreAudioSettings();
+AUDIO_SETTING_IDS.forEach(id=>{const el=$('#'+id);if(el){el.addEventListener('change',saveAudioSettings);if(el.type==='number')el.addEventListener('input',saveAudioSettings);}});
 function load(){try{return JSON.parse(localStorage.getItem(DBKEY))||{lessons:[]}}catch{return{lessons:[]}}}
 function save(){localStorage.setItem(DBKEY,JSON.stringify(state));}
 function uid(){return crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random())}
