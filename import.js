@@ -41,19 +41,36 @@
   function extractPairs(lines) {
     const out=[], seen=new Set();
     const polish=/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/;
-    const skip=/^(brilliant|vocabulary|lesson\s*\d*|superstar|english|polish|word|phrase|example|unit\s*\d*)$/i;
+    const header=/^(polski|polish|english|angielski|translation|meaning|sprawdź odpowiedź|przetłumacz)$/i;
+    const clean=s=>String(s||'').replace(/\\s+/g,' ').replace(/^\\d+[.)]\\s*/,'').trim();
+    const englishLike=s=>/[A-Za-z]/.test(s) && !polish.test(s);
+    const heading=/^(ratusz głównego miasta|słownictwo.*|jak korzystać.*|wygląd i architektura|historia i przebudowy|gotowe zdania.*|król zygmunt.*|page\\s*\\d+|strona\\s*\\d+)$/i;
     for(const raw of lines) {
-      const cells=raw.split(/\s*\|\s*/).map(s=>s.replace(/\s+/g,' ').trim()).filter(Boolean);
+      let cells=String(raw).split(/\\s*\\|\\s*/).map(clean).filter(Boolean);
+      if(cells.length<2 || cells.some(x=>header.test(x))) continue;
+      // Some PDF text layers lose column coordinates. Recover two columns from a
+      // single string using the first English article/infinitive cue.
+      if(cells.length===1) {
+        const s=cells[0], m=s.match(/\\s+(?=(?:a|an|the|to|is|are|was|were|built|being|King|Catholics|Protestants|at|over|before|thanks)\\b)/i);
+        if(m) cells=[s.slice(0,m.index).trim(),s.slice(m.index).trim()];
+      }
       if(cells.length<2) continue;
-      // English is normally the first cell and Polish the next cell. Ignore example columns.
-      const en=cells[0].replace(/^\d+[.)]?\s*/,'').trim();
-      let pl=cells[1] || cells.find((s,i)=>i>0 && polish.test(s));
-      if(!pl || !en || en.length>100 || pl.length>180 || !/[A-Za-z]/.test(en) || polish.test(en) || skip.test(en) || /^(translation|meaning|polish)$/i.test(pl)) continue;
-      if(/^(the |a |an )?(english|polish|translation|meaning)$/i.test(en)) continue;
+      let pl='',en='';
+      const first=clean(cells[0]), second=clean(cells[1]);
+      if(polish.test(first) && englishLike(second)){pl=first;en=second;}
+      else if(englishLike(first) && polish.test(second)){en=first;pl=second;}
+      else {
+        // This PDF's printed table labels are Polish-left / English-right.
+        pl=first; en=second;
+      }
+      pl=clean(pl);en=clean(en);
+      if(!pl||!en||pl.length>220||en.length>260||!/[A-Za-z]/.test(en)||header.test(pl)||header.test(en)||heading.test(pl)||heading.test(en)) continue;
+      if(/^(english|polish|translation|meaning|check the answer|translate)$/i.test(en)) continue;
+      // Exclude repeated page headers and section headings, while keeping full sentences.
+      if(/^(ratusz głównego miasta|słownictwo.*|strona\\s*\\d+)$/i.test(pl)) continue;
       const key=(en+'|'+pl).toLocaleLowerCase();
       if(seen.has(key)) continue;
-      seen.add(key);
-      out.push({id:uid(),pl,en,kind:guessKind(en),flash:true});
+      seen.add(key); out.push({id:uid(),pl,en,kind:guessKind(en),flash:true});
     }
     return out;
   }
