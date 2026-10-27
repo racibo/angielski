@@ -42,16 +42,16 @@
     const out=[], seen=new Set();
     const polish=/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/;
     const header=/^(polski|polish|english|angielski|translation|meaning|sprawdź odpowiedź|przetłumacz)$/i;
-    const clean=s=>String(s||'').replace(/\\s+/g,' ').replace(/^\\d+[.)]\\s*/,'').trim();
+    const clean=s=>String(s||'').replace(/\s+/g,' ').replace(/^\d+[.)]\s*/,'').trim();
     const englishLike=s=>/[A-Za-z]/.test(s) && !polish.test(s);
-    const heading=/^(ratusz głównego miasta|słownictwo.*|jak korzystać.*|wygląd i architektura|historia i przebudowy|gotowe zdania.*|król zygmunt.*|page\\s*\\d+|strona\\s*\\d+)$/i;
+    const heading=/^(ratusz głównego miasta|słownictwo.*|jak korzystać.*|wygląd i architektura|historia i przebudowy|gotowe zdania.*|król zygmunt.*|page\s*\d+|strona\s*\d+)$/i;
     for(const raw of lines) {
-      let cells=String(raw).split(/\\s*\\|\\s*/).map(clean).filter(Boolean);
+      let cells=String(raw).split(/\s*\|\s*/).map(clean).filter(Boolean);
       if(cells.length<2 || cells.some(x=>header.test(x))) continue;
       // Some PDF text layers lose column coordinates. Recover two columns from a
       // single string using the first English article/infinitive cue.
       if(cells.length===1) {
-        const s=cells[0], m=s.match(/\\s+(?=(?:a|an|the|to|is|are|was|were|built|being|King|Catholics|Protestants|at|over|before|thanks)\\b)/i);
+        const s=cells[0], m=s.match(/\s+(?=(?:a|an|the|to|is|are|was|were|built|being|King|Catholics|Protestants|at|over|before|thanks)\b)/i);
         if(m) cells=[s.slice(0,m.index).trim(),s.slice(m.index).trim()];
       }
       if(cells.length<2) continue;
@@ -67,7 +67,7 @@
       if(!pl||!en||pl.length>220||en.length>260||!/[A-Za-z]/.test(en)||header.test(pl)||header.test(en)||heading.test(pl)||heading.test(en)) continue;
       if(/^(english|polish|translation|meaning|check the answer|translate)$/i.test(en)) continue;
       // Exclude repeated page headers and section headings, while keeping full sentences.
-      if(/^(ratusz głównego miasta|słownictwo.*|strona\\s*\\d+)$/i.test(pl)) continue;
+      if(/^(ratusz głównego miasta|słownictwo.*|strona\s*\d+)$/i.test(pl)) continue;
       const key=(en+'|'+pl).toLocaleLowerCase();
       if(seen.has(key)) continue;
       seen.add(key); out.push({id:uid(),pl,en,kind:guessKind(en),flash:true});
