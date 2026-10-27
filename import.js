@@ -11,7 +11,8 @@
 
   // Preserve PDF text positions so entries in separate columns are not merged into one line.
   async function pdfPages(file) {
-    const doc = await pdfjsLib.getDocument({data: await file.async('uint8array')}).promise;
+    const data = typeof file.async === 'function' ? await file.async('uint8array') : new Uint8Array(await file.arrayBuffer());
+    const doc = await pdfjsLib.getDocument({data}).promise;
     const pages = [];
     for (let n=1;n<=doc.numPages;n++) {
       const page=await doc.getPage(n), content=await page.getTextContent();
@@ -124,4 +125,52 @@
       status('Błąd importu ZIP: '+err.message);
     } finally { button.disabled=false; }
   });
+
+  // Import a single PDF or a plain-text note without requiring a ZIP archive.
+  const directForm = $('#fileImportForm');
+  if (directForm) directForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const file = $('#lessonSourceFile').files[0];
+    if (!file) return;
+    const isPdf = /\.pdf$/i.test(file.name) || file.type === 'application/pdf';
+    const isText = /\.(txt|md)$/i.test(file.name) || /text\/(plain|markdown)/i.test(file.type);
+    if (!isPdf && !isText) { $('#fileImportStatus').textContent = 'Wybierz plik PDF, TXT albo MD.'; return; }
+    if (isPdf && !window.pdfjsLib) { $('#fileImportStatus').textContent = 'Nie załadowała się biblioteka PDF. Odśwież stronę i spróbuj ponownie.'; return; }
+    const button = directForm.querySelector('button[type="submit"]');
+    button.disabled = true; $('#fileImportPreview').innerHTML = '';
+    try {
+      const key = 'racibo-english-notebook-v1';
+      const state = JSON.parse(localStorage.getItem(key) || '{"lessons":[]}');
+      state.lessons = state.lessons || [];
+      const targetId = $('#fileTargetLesson').value;
+      let lesson = targetId ? state.lessons.find(l => l.id === targetId) : null;
+      const created = !lesson;
+      if (!lesson) {
+        lesson = {id:uid(), title:($('#fileLessonTitle').value.trim() || file.name.replace(/\.[^.]+$/, '')), date:new Date().toISOString().slice(0,10), items:[], group:'brilliant', sourceFiles:[], audioFiles:[], notes:[]};
+        state.lessons.unshift(lesson);
+      }
+      lesson.items = lesson.items || []; lesson.sourceFiles = lesson.sourceFiles || []; lesson.audioFiles = lesson.audioFiles || []; lesson.notes = lesson.notes || [];
+      let addedCards = 0;
+      if (isPdf) {
+        $('#fileImportStatus').textContent = 'Odczytuję tekst PDF i szukam par angielski–polski…';
+        const pairs = extractPairs(await pdfPages(file));
+        const existing = new Set(lesson.items.map(i => (i.en+'|'+i.pl).toLocaleLowerCase()));
+        const fresh = pairs.filter(i => !existing.has((i.en+'|'+i.pl).toLocaleLowerCase()));
+        lesson.items.push(...fresh); addedCards = fresh.length;
+        const saved = await saveAudio(file, lesson.id);
+        lesson.sourceFiles.push({...saved, type:'pdf'});
+      } else {
+        const textContent = await file.text();
+        if (!textContent.trim()) throw new Error('Plik tekstowy jest pusty.');
+        lesson.notes.push({id:uid(), name:file.name, text:textContent, addedAt:new Date().toISOString()});
+      }
+      localStorage.setItem(key, JSON.stringify(state));
+      $('#fileImportStatus').textContent = isPdf ? 'Dodano PDF. Utworzone fiszki: '+addedCards+'.' : 'Zapisano notatkę tekstową „'+file.name+'”.';
+      $('#fileImportPreview').innerHTML = '<div class="import-summary"><strong>Import zakończony</strong><p>'+(created?'Utworzono':'Zaktualizowano')+' lekcję „'+esc(lesson.title)+'”. '+(isPdf?'Zapisano PDF i dodano '+addedCards+' nowych fiszek. Jeśli układ PDF nie pozwolił rozpoznać par, otwórz lekcję — plik źródłowy nadal jest zachowany.':'Notatka została zapisana w lekcji i będzie widoczna w edytorze materiałów.')+'</p><button type="button" class="secondary" id="refreshAfterFileImport">Pokaż lekcję</button></div>';
+      $('#refreshAfterFileImport').onclick = () => location.reload();
+    } catch (err) {
+      $('#fileImportStatus').textContent = 'Nie udało się zaimportować pliku: '+err.message;
+    } finally { button.disabled = false; }
+  });
+
 })();
